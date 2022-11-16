@@ -34,10 +34,14 @@ class ArtistController
                     echo json_encode($artist);
                     break;
                 case 'PATCH':
-                    echo "update $id";
+                    $data = json_decode(file_get_contents('php://input'), true);
+
+                    $rows = $this->artistGateway->updateArtist($id, $data);
+                    echo json_encode(['message' => 'Artist updated', 'rows' => $rows]);
                     break;
                 case 'DELETE':
-                    echo "delete $id";
+                    $rows = $this->artistGateway->deleteArtist($id);
+                    echo json_encode(['message' => "Artist of id: $id deleted", "rows" => $rows]);
                     break;
                 default:
                     $this->respondMethodNotAllowed('GET, PATCH, DELETE');
